@@ -11,6 +11,11 @@
 - Use Prisma to connect the server to database.
 - Fetch data from backend to frontend (using Restful API), using fetch (or axios if not sure about the compatibility of browser)
 
+## How to make Graphql server in Nest, Prisma, Postgres
+
+- Create new project Nest: `nest new project_name`
+- Change port to 3333 (because 3000 will be used for React project later).
+
 ## Upcoming works:
 
 - [x] Build REST server with mock data.
