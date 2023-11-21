@@ -1,4 +1,4 @@
-// This is your Prisma schema file,
+   // This is your Prisma schema file,
 // learn more about it in the docs: https://pris.ly/d/prisma-schema
 
 generator client {
@@ -14,7 +14,8 @@ model User {
   id Int @id @default(autoincrement())
   createdAt DateTime @default(now())
 
-  email String
-  firstName String?
-  lastName String?
+  name String?
+  age Int?
+  hobby String?
+  role String?
 }

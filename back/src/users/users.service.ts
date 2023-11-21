@@ -1,4 +1,5 @@
 import { Injectable } from '@nestjs/common';
+import { PrismaService } from 'src/prisma/prisma.service';
 
 @Injectable()
 export class UsersService {
@@ -32,12 +33,17 @@ export class UsersService {
       role: 'INTERN',
     },
   ];
+  constructor(private prisma: PrismaService) {}
 
   getAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
     if (role) {
-      return this.usersData.filter((user) => user.role === role);
+      return this.prisma.user.findMany({
+        where: {
+          role: role,
+        },
+      });
     } else {
-      return this.usersData;
+      return this.prisma.user.findMany();
     }
   }
 
@@ -58,6 +64,7 @@ export class UsersService {
     };
     this.usersData.push(newUser);
     return newUser;
+    // this.prisma.user.create({ data: { ...user } });
   }
 
   updateUser(
