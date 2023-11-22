@@ -1,93 +1,52 @@
 import { Injectable } from '@nestjs/common';
 import { PrismaService } from 'src/prisma/prisma.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
+import { NotFoundException } from '@nestjs/common';
 
 @Injectable()
 export class UsersService {
-  private usersData = [
-    {
-      id: 1,
-      name: 'Dave',
-      age: 12,
-      hobby: 'football',
-      role: 'ADMIN',
-    },
-    {
-      id: 2,
-      name: 'Meo',
-      age: 5,
-      hobby: 'sleep',
-      role: 'INTERN',
-    },
-    {
-      id: 3,
-      name: 'Pony',
-      age: 6,
-      hobby: 'read',
-      role: 'ENGINEER',
-    },
-    {
-      id: 4,
-      name: 'Al',
-      age: 42,
-      hobby: 'eat',
-      role: 'INTERN',
-    },
-  ];
-  constructor(private prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-  getAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
+  async getAll(role?: 'INTERN' | 'ADMIN' | 'ENGINEER') {
     if (role) {
-      return this.prisma.user.findMany({
+      const roleUser = await this.prisma.user.findMany({
         where: {
           role: role,
         },
       });
+      if (roleUser.length === 0) {
+        throw new NotFoundException('User Role Not Found');
+      }
+      return roleUser;
     } else {
-      return this.prisma.user.findMany();
+      return await this.prisma.user.findMany();
     }
   }
 
-  getOne(id: number) {
-    return this.usersData.find((user) => user.id === id);
-  }
-
-  createUser(user: {
-    name: string;
-    age: number;
-    hobby: string;
-    role: 'INTERN' | 'ADMIN' | 'ENGINEER';
-  }) {
-    const usersByHighestId = [...this.usersData].sort((a, b) => b.id - a.id);
-    const newUser = {
-      id: usersByHighestId[0].id + 1,
-      ...user,
-    };
-    this.usersData.push(newUser);
-    return newUser;
-    // this.prisma.user.create({ data: { ...user } });
-  }
-
-  updateUser(
-    id: number,
-    userUpdate: {
-      name?: string;
-      age?: number;
-      hobby?: string;
-      role?: 'INTERN' | 'ADMIN' | 'ENGINEER';
-    },
-  ) {
-    this.usersData = this.usersData.map((user) => {
-      if (user.id === id) {
-        return { ...user, ...userUpdate };
-      }
-      return user;
+  async getOne(id: number) {
+    const user = await this.prisma.user.findUnique({
+      where: {
+        id: id,
+      },
     });
+    if (!user) throw new NotFoundException('User Not Found');
+    return user;
+  }
+
+  async createUser(createUserDto: CreateUserDto) {
+    await this.prisma.user.create({ data: createUserDto });
+    return createUserDto;
+  }
+
+  async updateUser(id: number, updateUserDto: UpdateUserDto) {
+    await this.prisma.user.update({ where: { id: id }, data: updateUserDto });
     return this.getOne(id);
   }
 
-  deleteUser(id: number) {
+  async deleteUser(id: number) {
     const removeUser = this.getOne(id);
-    this.usersData = this.usersData.filter((user) => user.id !== id);
+    await this.prisma.user.delete({ where: { id: id } });
     return removeUser;
   }
 }

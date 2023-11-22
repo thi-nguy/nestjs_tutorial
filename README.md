@@ -24,9 +24,11 @@
 - [x] Build REST server with mock data.
 - [x] Build REST server which connects to a database.
 - [x] Connect REST server to FrontEnd, be able to fetch data from database.
+- [x] Use validation Pipe & Exception to handle Error and Validation of inputs.
 
 - [x] Build GraphQL server with mock data.
 - [x] Build GraphQL server which connects to a database.
+- Test all method with this server (GET, POST, PATCH, DELETE).
 - Connect GraphQL server to FrontEnd (React), be able to fetch data from database.
 
 - Use Docker to build up everything at once.

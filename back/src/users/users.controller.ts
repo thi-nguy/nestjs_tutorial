@@ -7,9 +7,12 @@ import {
   Patch,
   Post,
   Query,
+  ParseIntPipe,
+  ValidationPipe,
 } from '@nestjs/common';
 import { UsersService } from './users.service';
-// import { UsersService } from './users.service';
+import { CreateUserDto } from './dto/create-user.dto';
+import { UpdateUserDto } from './dto/update-user.dto';
 
 @Controller('users')
 export class UsersController {
@@ -21,39 +24,26 @@ export class UsersController {
   }
 
   @Get(':id') // GET /users/:id ==> /users/3 - dynamic
-  getOne(@Param('id') id: string) {
-    return this.usersService.getOne(+id);
+  // ParseIntPipe transforms data from string to Int, also validate data if it's not numeric string.
+  getOne(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.getOne(id);
   }
 
   @Post() // POST /users
-  createUser(
-    @Body()
-    user: {
-      name: string;
-      age: number;
-      hobby: string;
-      role: 'INTERN' | 'ADMIN' | 'ENGINEER';
-    },
-  ) {
-    return this.usersService.createUser(user);
+  createUser(@Body(ValidationPipe) createUserDto: CreateUserDto) {
+    return this.usersService.createUser(createUserDto);
   }
 
   @Patch(':id') // PATCH /users/:id => update a part of info
   updateUser(
-    @Param('id') id: string,
-    @Body()
-    userUpdate: {
-      name?: string;
-      age?: number;
-      hobby?: string;
-      role?: 'INTERN' | 'ADMIN' | 'ENGINEER';
-    },
+    @Param('id', ParseIntPipe) id: number,
+    @Body(ValidationPipe) updateUserDto: UpdateUserDto,
   ) {
-    return this.usersService.updateUser(+id, userUpdate);
+    return this.usersService.updateUser(id, updateUserDto);
   }
 
   @Delete(':id') // DELETE /users/:id
-  deleteUser(@Param('id') id: string) {
-    return this.usersService.deleteUser(+id);
+  deleteUser(@Param('id', ParseIntPipe) id: number) {
+    return this.usersService.deleteUser(id);
   }
 }
