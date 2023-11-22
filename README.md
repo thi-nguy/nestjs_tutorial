@@ -15,6 +15,9 @@
 
 - Create new project Nest: `nest new project_name`
 - Change port to 3333 (because 3000 will be used for React project later).
+- Install dependencies for graphql: `npm i @nestjs/graphql @nestjs/apollo @apollo/server graphql`.
+- Import the GraphQLModule to AppModule and configure it with the forRoot() static method.
+- Use Schema First Approach. (allow splitting schema into several files which can be located near their resolvers, meanwhile Code First Approach: allow us write in only Typescript, not change to Graphql syntax). Config GraphQLModule following this approach.
 
 ## Upcoming works:
 
@@ -22,8 +25,8 @@
 - [x] Build REST server which connects to a database.
 - [x] Connect REST server to FrontEnd, be able to fetch data from database.
 
-- Build GraphQL server with mock data.
-- Build GraphQL server which connects to a database.
+- [x] Build GraphQL server with mock data.
+- [x] Build GraphQL server which connects to a database.
 - Connect GraphQL server to FrontEnd (React), be able to fetch data from database.
 
 - Use Docker to build up everything at once.
