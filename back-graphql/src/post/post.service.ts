@@ -7,12 +7,12 @@ export class PostService {
   constructor(private readonly prisma: PrismaService) {}
 
   async getPosts(): Promise<Post[]> {
-    return this.prisma.post.findMany();
+    return await this.prisma.post.findMany();
   }
-  async getAPost(id: string): Promise<Post | null> {
-    return this.prisma.post.findUnique({
+  async getAPost(id: number): Promise<Post | null> {
+    return await this.prisma.post.findUnique({
       where: {
-        id: Number(id),
+        id: id,
       },
     });
   }

@@ -1,0 +1,12 @@
+FROM node:20.5.1-alpine
+WORKDIR /app/back
+COPY ./package.json ./
+RUN npm i
+COPY . .
+RUN npm run build
+RUN npx prisma generate
+# RUN npx prisma migrate dev
+EXPOSE 3333
+CMD ["npm", "run", "start:dev"]
+
+# How to do Prisma migrate?

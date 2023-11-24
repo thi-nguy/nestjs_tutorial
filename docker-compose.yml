@@ -1,14 +1,35 @@
-version: "3.8"
+version: "3"
 services:
-  mydatabase:
+  matcha-database:
     image: postgres:13
+    restart: unless-stopped
     ports:
-      - 5434:5432
+      - "5432:5432"
     environment:
-      POSTGRES_USER: nhung
-      POSTGRES_PASSWORD: meomeo
-      POSGRES_DB: nest_db
-    networks:
-      - meomeomeo
-networks:
-  meomeomeo:
+      - POSTGRES_PASSWORD=meomeo
+
+  matcha-back:
+    build:
+      context: ./back-graphql
+      dockerfile: Dockerfile.dev
+    environment:
+      - POSTGRES_HOST=matcha-database
+      - POSTGRES_PORT=5432
+      - POSTGRES_USER=nhung
+      - POSTGRES_PASSWORD=meomeo
+      - POSGRES_DB=nest_db
+    restart: unless-stopped
+    env_file: ./back-graphql/.env
+    depends_on:
+      - matcha-database
+    ports:
+      - "3333:3333"
+
+  matcha-front:
+    stdin_open: true
+    build:
+      context: ./front
+      dockerfile: Dockerfile.dev
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
