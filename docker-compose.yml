@@ -18,6 +18,7 @@ services:
       - POSTGRES_USER=nhung
       - POSTGRES_PASSWORD=meomeo
       - POSGRES_DB=nest_db
+      - DB_URI=postgresql://postgres:meomeo@matcha-database:5432/postgres?schema=public
     restart: unless-stopped
     env_file: ./back-graphql/.env
     depends_on:

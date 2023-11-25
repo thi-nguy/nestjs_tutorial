@@ -8,7 +8,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
-  url      = "postgresql://nhung:meomeo@localhost:5432/nest_db?schema=public"
+  url      = env("DB_URI")
 }
 
 model User {
